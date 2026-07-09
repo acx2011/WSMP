@@ -1,0 +1,848 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>高中生日本留学申请介绍</title>
+    <meta
+      name="description"
+      content="面向中国普通高中、国际学校和海外高中毕业生的日本本科申请信息整理，覆盖EJU、语言学校、英文授课项目、签证官方信息和大学官网入口。"
+    />
+    <style>
+      :root {
+        --ink: #102033;
+        --muted: #5d6c7d;
+        --blue: #174b8f;
+        --blue-2: #0f6eb8;
+        --sky: #eaf5ff;
+        --pale: #f6f9fc;
+        --line: #d8e3ee;
+        --white: #ffffff;
+        --accent: #d64b42;
+        --shadow: 0 18px 50px rgba(30, 63, 98, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background: var(--white);
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei",
+          "Noto Sans CJK SC", sans-serif;
+        line-height: 1.7;
+      }
+
+      a {
+        color: var(--blue-2);
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      .wrap {
+        width: min(1120px, calc(100% - 40px));
+        margin: 0 auto;
+      }
+
+      .hero {
+        position: relative;
+        min-height: 680px;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        color: #0d233b;
+        background: #dcebf8 url("assets/japan-study-hero.png") center right / cover no-repeat;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(90deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.9) 35%, rgba(255, 255, 255, 0.45) 68%, rgba(255, 255, 255, 0.16) 100%),
+          linear-gradient(180deg, rgba(234, 245, 255, 0.22), rgba(255, 255, 255, 0.92));
+      }
+
+      .hero-content {
+        position: relative;
+        max-width: 760px;
+        padding: 92px 0 76px;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 18px;
+        color: var(--blue);
+        font-size: 0.95rem;
+        font-weight: 700;
+      }
+
+      .eyebrow::before {
+        content: "";
+        width: 28px;
+        height: 3px;
+        background: var(--accent);
+        border-radius: 999px;
+      }
+
+      h1,
+      h2,
+      h3 {
+        margin: 0;
+        line-height: 1.25;
+      }
+
+      h1 {
+        max-width: 680px;
+        font-size: clamp(2.25rem, 6vw, 4.8rem);
+        letter-spacing: 0;
+      }
+
+      h1 span {
+        display: block;
+      }
+
+      .subtitle {
+        max-width: 720px;
+        margin: 24px 0 34px;
+        color: #33475c;
+        font-size: clamp(1.02rem, 2vw, 1.25rem);
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 46px;
+        padding: 10px 18px;
+        border: 1px solid var(--blue);
+        border-radius: 8px;
+        background: var(--blue);
+        color: var(--white);
+        font-weight: 700;
+      }
+
+      .btn.secondary {
+        background: rgba(255, 255, 255, 0.82);
+        color: var(--blue);
+      }
+
+      .btn:hover {
+        text-decoration: none;
+        filter: brightness(0.98);
+      }
+
+      .section {
+        padding: 72px 0;
+      }
+
+      .section.soft {
+        background: var(--pale);
+      }
+
+      .section-head {
+        max-width: 780px;
+        margin-bottom: 28px;
+      }
+
+      .section-kicker {
+        margin: 0 0 8px;
+        color: var(--blue-2);
+        font-size: 0.88rem;
+        font-weight: 800;
+      }
+
+      h2 {
+        font-size: clamp(1.7rem, 3vw, 2.45rem);
+      }
+
+      h3 {
+        font-size: 1.18rem;
+      }
+
+      .lead {
+        margin: 14px 0 0;
+        color: var(--muted);
+      }
+
+      .notice {
+        border: 1px solid #b7d5ef;
+        border-left: 5px solid var(--blue-2);
+        border-radius: 8px;
+        padding: 22px;
+        background: #f3f9ff;
+        color: #26445f;
+        box-shadow: 0 8px 28px rgba(23, 75, 143, 0.08);
+      }
+
+      .grid {
+        display: grid;
+        gap: 18px;
+      }
+
+      .grid.four {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .grid.two {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .card,
+      .route,
+      .info-box {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--white);
+        box-shadow: 0 10px 30px rgba(31, 63, 95, 0.06);
+      }
+
+      .card {
+        padding: 22px;
+      }
+
+      .card .num,
+      .route .num {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        margin-bottom: 14px;
+        border-radius: 50%;
+        background: var(--sky);
+        color: var(--blue);
+        font-weight: 800;
+      }
+
+      .card p,
+      .route p,
+      .info-box p,
+      .faq p {
+        margin: 10px 0 0;
+        color: var(--muted);
+      }
+
+      .routes {
+        display: grid;
+        gap: 22px;
+      }
+
+      .route {
+        padding: 26px;
+      }
+
+      .route-flow {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 18px 0;
+      }
+
+      .route-flow span,
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        min-height: 34px;
+        padding: 6px 12px;
+        border: 1px solid #c7d9eb;
+        border-radius: 999px;
+        background: #f7fbff;
+        color: #24435f;
+        font-size: 0.92rem;
+      }
+
+      ul.clean {
+        display: grid;
+        gap: 8px;
+        margin: 14px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      ul.clean li {
+        position: relative;
+        padding-left: 18px;
+        color: var(--muted);
+      }
+
+      ul.clean li::before {
+        content: "";
+        position: absolute;
+        top: 0.78em;
+        left: 0;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--blue-2);
+      }
+
+      .requirements {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .info-box {
+        padding: 24px;
+      }
+
+      .program-panel {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 24px;
+        align-items: start;
+      }
+
+      .tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .official-links {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .link-card {
+        display: block;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 18px;
+        background: var(--white);
+        font-weight: 800;
+      }
+
+      .link-card span {
+        display: block;
+        margin-top: 4px;
+        color: var(--muted);
+        font-size: 0.9rem;
+        font-weight: 500;
+        word-break: break-all;
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--white);
+        box-shadow: 0 10px 30px rgba(31, 63, 95, 0.05);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 760px;
+      }
+
+      th,
+      td {
+        padding: 15px 16px;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        background: #edf6ff;
+        color: #193d62;
+        font-size: 0.92rem;
+      }
+
+      tr:last-child td {
+        border-bottom: 0;
+      }
+
+      td {
+        color: var(--muted);
+      }
+
+      td strong {
+        color: var(--ink);
+      }
+
+      .timeline {
+        position: relative;
+        display: grid;
+        gap: 16px;
+      }
+
+      .time-item {
+        display: grid;
+        grid-template-columns: 140px 1fr;
+        gap: 20px;
+        padding: 22px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--white);
+      }
+
+      .time-label {
+        color: var(--blue);
+        font-weight: 900;
+      }
+
+      .faq {
+        display: grid;
+        gap: 12px;
+      }
+
+      details {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--white);
+        box-shadow: 0 8px 24px rgba(31, 63, 95, 0.05);
+      }
+
+      summary {
+        cursor: pointer;
+        padding: 18px 20px;
+        color: var(--ink);
+        font-weight: 800;
+      }
+
+      details p {
+        padding: 0 20px 20px;
+      }
+
+      footer {
+        padding: 36px 0;
+        background: #12233a;
+        color: #d8e5f2;
+      }
+
+      footer p {
+        margin: 8px 0;
+      }
+
+      footer a {
+        color: #ffffff;
+        font-weight: 700;
+      }
+
+      .footer-meta {
+        color: #9fb5ca;
+      }
+
+      @media (max-width: 900px) {
+        .hero {
+          min-height: 620px;
+          background-position: center right 28%;
+        }
+
+        .grid.four,
+        .grid.two,
+        .requirements,
+        .program-panel,
+        .official-links {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .wrap {
+          width: min(100% - 28px, 1120px);
+        }
+
+        .hero {
+          min-height: auto;
+          align-items: flex-start;
+        }
+
+        .hero::before {
+          background:
+            linear-gradient(90deg, rgba(255, 255, 255, 0.97) 0%, rgba(255, 255, 255, 0.86) 72%, rgba(255, 255, 255, 0.62) 100%),
+            linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.97));
+        }
+
+        .hero-content {
+          padding: 70px 0 56px;
+        }
+
+        .hero-actions {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .btn {
+          width: 100%;
+        }
+
+        .section {
+          padding: 52px 0;
+        }
+
+        .card,
+        .route,
+        .info-box,
+        .notice,
+        .time-item {
+          padding: 18px;
+        }
+
+        .time-item {
+          grid-template-columns: 1fr;
+          gap: 8px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="hero">
+      <div class="wrap">
+        <div class="hero-content">
+          <div class="eyebrow">高中生日本本科申请信息整理</div>
+          <h1><span>高中生</span><span>日本留学申请介绍</span></h1>
+          <p class="subtitle">
+            普通高中、国际学校、海外高中毕业生如何申请日本大学？本页整理日本本科申请路径、EJU、语言学校、英文授课项目和留学签证官方信息。
+          </p>
+          <div class="hero-actions" aria-label="页面导航">
+            <a class="btn" href="#paths">查看申请路径</a>
+            <a class="btn secondary" href="#universities">查看日本大学官网入口</a>
+            <a class="btn secondary" href="#visa">查看留学签证官方信息</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="section">
+        <div class="wrap">
+          <div class="notice">
+            本页为日本留学信息整理，不构成申请保证。大学、语言学校、签证和入管要求可能每年变化。申请前请以日本外务省、日本出入国在留管理厅、JASSO、学校官网和日本驻当地使领馆最新信息为准。
+          </div>
+        </div>
+      </section>
+
+      <section class="section soft" id="students">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="section-kicker">适合哪些学生</p>
+            <h2>不同高中背景，可以对应不同申请路径</h2>
+          </div>
+          <div class="grid four">
+            <article class="card">
+              <span class="num">1</span>
+              <h3>中国普通高中在读/毕业学生</h3>
+              <p>适合高一、高二提前规划，或高三毕业后申请日本语言学校、EJU路线或部分大学直接申请。</p>
+            </article>
+            <article class="card">
+              <span class="num">2</span>
+              <h3>中国国际学校学生</h3>
+              <p>适合A-Level、IB、AP、美高课程、OSSD等学生，可重点关注日本大学英文授课本科项目。</p>
+            </article>
+            <article class="card">
+              <span class="num">3</span>
+              <h3>海外高中毕业学生</h3>
+              <p>适合加拿大、美国、英国、澳洲等海外高中毕业生，可使用海外高中成绩、毕业证、英语成绩和标准化考试成绩申请。</p>
+            </article>
+            <article class="card">
+              <span class="num">4</span>
+              <h3>日语基础较弱但想去日本的学生</h3>
+              <p>可以先申请日本语言学校，在日本学习日语并准备EJU、JLPT、校内考和面试。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="paths">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="section-kicker">本科申请主要路径</p>
+            <h2>四条常见路线</h2>
+          </div>
+          <div class="routes">
+            <article class="route">
+              <span class="num">1</span>
+              <h3>语言学校 + EJU + 大学申请</h3>
+              <div class="route-flow">
+                <span>高中毕业</span><span>申请日本语言学校</span><span>赴日学习日语</span><span>参加EJU</span><span>参加大学校内考/面试</span><span>入读日本大学</span>
+              </div>
+              <p>EJU是日本留学试验，用于评估外国学生申请日本高等教育机构所需的日语能力和基础学力。很多日语授课本科项目会参考EJU成绩，但不是所有大学和所有项目都必须要求EJU。</p>
+              <p>官方参考：<a href="https://www.jasso.go.jp/en/ryugaku/eju/index.html" target="_blank" rel="noopener">JASSO EJU</a></p>
+            </article>
+            <article class="route">
+              <span class="num">2</span>
+              <h3>国内备考日语/EJU → 直接申请日本大学</h3>
+              <p><strong>适合：</strong>日语基础较好、准备时间较早、目标明确的普通高中学生。</p>
+              <ul class="clean">
+                <li>高中毕业或预计毕业</li>
+                <li>日语能力</li>
+                <li>EJU成绩</li>
+                <li>部分大学要求英语成绩</li>
+                <li>校内考、面试、小论文</li>
+              </ul>
+            </article>
+            <article class="route">
+              <span class="num">3</span>
+              <h3>英语授课本科项目</h3>
+              <p><strong>适合：</strong>国际学校学生、海外高中毕业生、英语能力较强的学生。</p>
+              <ul class="clean">
+                <li>高中毕业证或预计毕业证明</li>
+                <li>高中成绩单</li>
+                <li>IELTS / TOEFL / Duolingo等英语成绩</li>
+                <li>SAT / ACT / IB / A-Level / AP等成绩，具体看学校要求</li>
+                <li>个人陈述、推荐信、面试</li>
+              </ul>
+            </article>
+            <article class="route">
+              <span class="num">4</span>
+              <h3>专门学校 / 短期大学 / 职业方向</h3>
+              <p><strong>适合：</strong>希望学习职业技能，未来考虑就业或继续升学的学生。</p>
+              <div class="tag-list">
+                <span class="pill">动漫</span><span class="pill">设计</span><span class="pill">IT</span><span class="pill">护理</span><span class="pill">酒店管理</span><span class="pill">汽车</span><span class="pill">商务</span><span class="pill">餐饮</span><span class="pill">服装</span>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section soft" id="requirements">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="section-kicker">基本申请要求</p>
+            <h2>学历、语言、考试与材料</h2>
+          </div>
+          <div class="requirements">
+            <article class="info-box">
+              <h3>1. 学历要求</h3>
+              <p>日本大学本科通常要求完成12年正规学校教育。普通高中、国际学校、海外高中毕业生都需要提供相应毕业证明或预计毕业证明。</p>
+              <p>官方参考：<a href="https://www.studyinjapan.go.jp/en/planning/learn-about-schools/universities/" target="_blank" rel="noopener">Study in Japan Universities</a></p>
+            </article>
+            <article class="info-box">
+              <h3>2. 语言要求</h3>
+              <p>日语授课项目通常需要日语能力，常见参考为JLPT N2左右，但具体要求以学校为准。英文授课项目通常需要英语成绩，例如IELTS、TOEFL等。</p>
+            </article>
+            <article class="info-box">
+              <h3>3. 考试要求</h3>
+              <p><strong>日语授课项目常见：</strong>EJU、JLPT、校内考、面试、小论文。</p>
+              <p><strong>英文授课项目常见：</strong>高中成绩、英语成绩、SAT / ACT / IB / A-Level / AP等、文书、推荐信、面试。</p>
+            </article>
+            <article class="info-box">
+              <h3>4. 常见申请材料</h3>
+              <ul class="clean">
+                <li>护照、高中成绩单、高中毕业证或预计毕业证明</li>
+                <li>语言成绩、EJU成绩、标准化考试成绩</li>
+                <li>志望理由书、推荐信、经费支付证明</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="international">
+        <div class="wrap">
+          <div class="program-panel">
+            <div>
+              <p class="section-kicker">国际学校 / 海外高中毕业生申请日本大学</p>
+              <h2>英文授课本科项目值得优先筛选</h2>
+              <p class="lead">
+                这类学生通常更适合关注日本大学英文授课本科项目。申请时，学校会重点查看高中课程体系、成绩单、英语能力、标准化考试成绩、文书和面试表现。
+              </p>
+              <p class="lead">
+                日本大学英文授课本科项目数量少于欧美国家，需要提前筛选学校和专业。申请前要确认项目语言、入学时间、是否要求SAT/ACT/IB/A-Level/AP，以及是否接受学生当前课程体系。
+              </p>
+            </div>
+            <div class="info-box">
+              <h3>常见课程体系</h3>
+              <div class="tag-list">
+                <span class="pill">IB</span><span class="pill">A-Level</span><span class="pill">AP</span><span class="pill">美高课程</span><span class="pill">加拿大OSSD</span><span class="pill">澳洲高中</span><span class="pill">英国高中</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section soft" id="visa">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="section-kicker">日本留学签证官方信息</p>
+            <h2>先确认COE与签证流程</h2>
+            <p class="lead">日本留学签证通常需要先获得学校录取，然后由学校或代理人向日本地方出入国在留管理局申请COE。获得COE后，再向日本驻当地使领馆申请留学签证。</p>
+          </div>
+          <div class="official-links">
+            <a class="link-card" href="https://www.mofa.go.jp/j_info/visit/visa/index.html" target="_blank" rel="noopener">日本外务省签证总入口<span>mofa.go.jp</span></a>
+            <a class="link-card" href="https://www.mofa.go.jp/j_info/visit/visa/long/visa6.html" target="_blank" rel="noopener">日本外务省 Student Visa 页面<span>mofa.go.jp</span></a>
+            <a class="link-card" href="https://www.studyinjapan.go.jp/en/planning/immigration-procedures/" target="_blank" rel="noopener">Study in Japan 签证流程<span>studyinjapan.go.jp</span></a>
+            <a class="link-card" href="https://www.moj.go.jp/isa/applications/status/student.html" target="_blank" rel="noopener">日本出入国在留管理厅「留学」在留资格<span>moj.go.jp</span></a>
+            <a class="link-card" href="https://www.cn.emb-japan.go.jp/consular.htm" target="_blank" rel="noopener">日本驻华大使馆签证页面<span>cn.emb-japan.go.jp</span></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="universities">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="section-kicker">日本大学官网申请入口示例</p>
+            <h2>从学校官网核对项目和截止日期</h2>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>学校</th>
+                  <th>城市</th>
+                  <th>适合方向</th>
+                  <th>官网链接</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><strong>东京大学</strong></td><td>东京</td><td>顶尖综合大学，日语本科和英文项目</td><td><a href="https://www.u-tokyo.ac.jp/en/prospective-students/undergraduate_admissions.html" target="_blank" rel="noopener">Undergraduate Admissions</a></td></tr>
+                <tr><td><strong>京都大学 Kyoto iUP</strong></td><td>京都</td><td>综合大学，预备课程+本科</td><td><a href="https://www.iup.kyoto-u.ac.jp/" target="_blank" rel="noopener">Kyoto iUP</a> / <a href="https://www.iup.kyoto-u.ac.jp/apply/" target="_blank" rel="noopener">Apply</a></td></tr>
+                <tr><td><strong>大阪大学</strong></td><td>大阪</td><td>理科、基础科学英文项目</td><td><a href="https://www.sci.osaka-u.ac.jp/en/admissions/undergraduate-programs/" target="_blank" rel="noopener">Undergraduate Programs</a></td></tr>
+                <tr><td><strong>早稻田大学</strong></td><td>东京</td><td>英文授课项目较多</td><td><a href="https://www.waseda.jp/inst/admission/en/undergraduate/english" target="_blank" rel="noopener">English-based Undergraduate</a></td></tr>
+                <tr><td><strong>上智大学</strong></td><td>东京</td><td>国际教养、文科、英文项目</td><td><a href="https://adm.sophia.ac.jp/eng/admissions/ug_p/en_ug/" target="_blank" rel="noopener">English-taught UG Admissions</a></td></tr>
+                <tr><td><strong>立命馆大学</strong></td><td>京都 / 大阪</td><td>国际关系、政策科学、信息科学等英文项目</td><td><a href="https://en.ritsumei.ac.jp/e-ug/" target="_blank" rel="noopener">English-based Undergraduate</a></td></tr>
+                <tr><td><strong>立命馆亚洲太平洋大学 APU</strong></td><td>别府</td><td>国际化程度高，英文/日文授课</td><td><a href="https://admissions.apu.ac.jp/" target="_blank" rel="noopener">APU Admissions</a></td></tr>
+                <tr><td><strong>名古屋大学 G30</strong></td><td>名古屋</td><td>理工、医学、社会科学英文项目</td><td><a href="https://admissions.g30.nagoya-u.ac.jp/admissions/undergraduate/" target="_blank" rel="noopener">G30 Undergraduate</a></td></tr>
+                <tr><td><strong>九州大学</strong></td><td>福冈</td><td>工程、农业、英文授课本科</td><td><a href="https://www.kyushu-u.ac.jp/en/admission/faculty/foreign/foreign10/" target="_blank" rel="noopener">International Undergraduate Programs</a></td></tr>
+                <tr><td><strong>北海道大学</strong></td><td>札幌</td><td>Integrated Science Program、现代日本研究项目</td><td><a href="https://www.global.hokudai.ac.jp/study-at-hu/" target="_blank" rel="noopener">Study at HU</a></td></tr>
+                <tr><td><strong>筑波大学</strong></td><td>筑波</td><td>英文授课本科项目</td><td><a href="https://www.global.tsukuba.ac.jp/undergraduate/" target="_blank" rel="noopener">Undergraduate Programs</a></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="section soft" id="language-schools">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="section-kicker">日本语言学校示例</p>
+            <h2>语言学校需逐校核对签证、入学期和材料</h2>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>学校</th>
+                  <th>城市</th>
+                  <th>适合学生 / 特点</th>
+                  <th>官网链接</th>
+                  <th>简要入学要求</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><strong>ISI日本语学校</strong></td><td>东京 / 京都 / 长野等</td><td>校区多，长期课程通常可申请留学签证</td><td><a href="https://www.isi-education.com/application/process/" target="_blank" rel="noopener">Application Process</a></td><td>长期课程通常为6个月到2年；学校可协助COE申请；常见入学时间为1月、4月、7月、10月。</td></tr>
+                <tr><td><strong>GenkiJACS</strong></td><td>福冈 / 名古屋等</td><td>长期学生签证课程以官网可申请分校为准</td><td><a href="https://www.genkijacs.com/visa.php" target="_blank" rel="noopener">Visa Information</a></td><td>需要资金证明；通常需要JLPT N5、150小时日语学习证明或同等条件之一；学历要求按申请分校和课程确认。</td></tr>
+                <tr><td><strong>Kudan Institute</strong></td><td>东京</td><td>提供升学和语言学习课程</td><td><a href="https://www.kudan-japanese-school.com/en/visa/precollege.php" target="_blank" rel="noopener">Pre-college Visa</a></td><td>申请表、履历、最终学历毕业证、护照、照片、经费支付材料、银行余额证明。</td></tr>
+                <tr><td><strong>Kyoshin Language Academy KLA</strong></td><td>东京 / 京都 / 大阪等</td><td>多校区日本语学校，适合希望长期学习日语并准备升学的学生</td><td><a href="https://www.kla.ac/admissions/flow/" target="_blank" rel="noopener">Admissions Flow</a></td><td>18岁以上；完成12年教育或同等学历；按学校要求提交申请材料。</td></tr>
+                <tr><td><strong>JASSO东京日本语教育中心</strong></td><td>东京</td><td>大学/研究生预备教育机构</td><td><a href="https://www.jasso.go.jp/en/ryugaku/jlec/tjlec/enrollment/index.html" target="_blank" rel="noopener">Enrollment</a></td><td>A1 / JLPT N5相当日语能力，或150小时日语学习经历。</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="timeline">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="section-kicker">申请时间规划</p>
+            <h2>从高一到毕业后的准备节奏</h2>
+          </div>
+          <div class="timeline">
+            <article class="time-item">
+              <div class="time-label">高一 / 高二</div>
+              <ul class="clean">
+                <li>了解日本大学申请路径</li>
+                <li>开始日语或英语准备</li>
+                <li>确定日语授课还是英语授课方向</li>
+                <li>了解EJU、JLPT、IELTS、TOEFL等考试</li>
+              </ul>
+            </article>
+            <article class="time-item">
+              <div class="time-label">高三上学期</div>
+              <ul class="clean">
+                <li>确定目标学校和专业</li>
+                <li>准备成绩单、在读证明、语言成绩</li>
+                <li>申请语言学校或准备大学申请</li>
+                <li>规划EJU或英文项目材料</li>
+              </ul>
+            </article>
+            <article class="time-item">
+              <div class="time-label">高三下学期</div>
+              <ul class="clean">
+                <li>获得高中毕业材料</li>
+                <li>提交大学或语言学校申请</li>
+                <li>准备COE和签证材料</li>
+                <li>安排住宿、机票和入境准备</li>
+              </ul>
+            </article>
+            <article class="time-item">
+              <div class="time-label">高中毕业后</div>
+              <ul class="clean">
+                <li>如果日语不足，可以先读语言学校</li>
+                <li>如果语言和材料足够，可以直接申请大学本科项目</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section soft" id="faq">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="section-kicker">FAQ 常见问题</p>
+            <h2>申请前常见疑问</h2>
+          </div>
+          <div class="faq">
+            <details>
+              <summary>1. 普通高中生没有日语基础，可以申请日本大学吗？</summary>
+              <p>可以，但通常需要先学习日语。很多学生会先申请日本语言学校，再准备EJU和大学申请。</p>
+            </details>
+            <details>
+              <summary>2. 日本留学一定要考EJU吗？</summary>
+              <p>不一定。很多日语授课本科会参考EJU，但英文授课项目通常不要求EJU，而是看高中成绩、英语成绩和标准化考试成绩。</p>
+            </details>
+            <details>
+              <summary>3. 国际学校学生可以不用日语申请日本大学吗？</summary>
+              <p>可以关注英文授课本科项目。但日本英文授课本科项目数量有限，需要提前筛选学校和专业。</p>
+            </details>
+            <details>
+              <summary>4. 高考成绩对日本大学申请有用吗？</summary>
+              <p>部分学校可能接受或参考中国高考成绩，但不是所有学校都要求。具体要看大学官网。</p>
+            </details>
+            <details>
+              <summary>5. 语言学校是不是必须读？</summary>
+              <p>不是必须。如果学生已经具备足够日语能力、EJU成绩和申请材料，可以直接申请大学。</p>
+            </details>
+            <details>
+              <summary>6. 留学签证是不是学校帮忙办？</summary>
+              <p>通常学校会协助申请COE。学生拿到COE后，再向日本使领馆申请留学签证。</p>
+            </details>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap">
+        <p>资料更新时间：2026年7月</p>
+        <p class="footer-meta">页面技术支持：<a href="https://pointwin.net/" target="_blank" rel="noopener">微点信息</a></p>
+        <p class="footer-meta">信息来源：日本外务省、日本出入国在留管理厅、JASSO、Study in Japan、各大学官网、各语言学校官网</p>
+        <p>请在正式申请前再次访问学校和日本官方机构官网，确认最新申请要求、截止日期、材料清单和签证政策。</p>
+      </div>
+    </footer>
+  </body>
+</html>
