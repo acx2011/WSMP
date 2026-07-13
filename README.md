@@ -41,6 +41,19 @@ pnpm run build
 pnpm run preview
 ```
 
+## Cloudflare Pages 部署
+
+在 Cloudflare Pages 中连接 GitHub 仓库 `acx2011/WSMP`，使用以下配置：
+
+```text
+Framework preset: Vite
+Install command: pnpm install
+Build command: pnpm run build
+Build output directory: dist
+```
+
+项目包含 `public/_redirects`，构建后会输出到 `dist/_redirects`，用于支持 Vue Router history 模式下的页面刷新和子路由直达。
+
 ## 当前功能
 
 - 园区总览控制台
