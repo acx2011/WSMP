@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { ElMessage } from 'element-plus/es/components/message/index'
 import { ElMessageBox } from 'element-plus/es/components/message-box/index'
-import { BellRing, CheckCircle2, RotateCcw, Siren } from '@/icons/lucide'
+import { BellRing, CheckCircle2, Download, RotateCcw, Siren } from '@/icons/lucide'
 import PlatformLayout from '@/components/PlatformLayout.vue'
 import { useSecurityStore } from '@/stores/security'
 
@@ -23,6 +23,21 @@ const simulateAlarm = () => {
   store.triggerAlarm(target.id)
   store.selectArea(target.id)
   ElMessage.success('已模拟一条报警')
+}
+
+const exportAlarmEvents = async () => {
+  const header = ['时间', '区域', '事件描述', '操作人']
+  const rows = alarmEvents.value.map((event) => [event.time, event.areaName, event.description, event.operator])
+  const csv = [header, ...rows].map((row) => row.map((cell) => `"${cell.replace(/"/g, '""')}"`).join(',')).join('\n')
+  const blob = new Blob([`\ufeff${csv}`], { type: 'text/csv;charset=utf-8' })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = `alarm-events-${Date.now()}.csv`
+  link.click()
+  URL.revokeObjectURL(url)
+  await navigator.clipboard?.writeText(csv).catch(() => undefined)
+  ElMessage.success('报警事件已导出')
 }
 </script>
 
@@ -65,7 +80,10 @@ const simulateAlarm = () => {
         <div class="panel alarm-timeline">
           <div class="panel-title">
             <span>报警事件流</span>
-            <button class="link-action" type="button" @click="ElMessage.info('导出功能开发中')">导出</button>
+            <button class="link-action" type="button" @click="exportAlarmEvents">
+              <Download :size="15" />
+              导出
+            </button>
           </div>
           <div v-for="event in alarmEvents" :key="event.id" class="timeline-row">
             <span>{{ event.time }}</span>

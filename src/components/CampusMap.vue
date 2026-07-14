@@ -1,17 +1,55 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { ShieldCheck } from '@/icons/lucide'
+import campusOverview from '@/assets/campus-overview.png'
+import building1Map from '@/assets/map-building-1.svg'
+import building2Map from '@/assets/map-building-2.svg'
+import building3Map from '@/assets/map-building-3.svg'
+import building4Map from '@/assets/map-building-4.svg'
+import externalMap from '@/assets/map-external.svg'
+import floorMap from '@/assets/map-floor.svg'
 import { statusColors, statusLabels, useSecurityStore } from '@/stores/security'
 import type { SecurityArea } from '@/types/security'
 
 const store = useSecurityStore()
-const mapAreas = computed(() => store.areas.filter((area) => area.type !== 'floor' && area.polygon))
 
-const polygonCenter = (area: SecurityArea) => {
-  const points = area.polygon?.split(' ').map((point) => {
+interface MapDefinition {
+  id: string
+  title: string
+  subtitle: string
+  image: string
+}
+
+type MapArea = SecurityArea & { activePolygon: string }
+
+const mapDefinitions: Record<string, MapDefinition> = {
+  overview: { id: 'overview', title: '园区总览', subtitle: '建筑级安防状态', image: campusOverview },
+  'building-1': { id: 'building-1', title: '1号办公楼', subtitle: '楼层划分与布防状态', image: building1Map },
+  'building-2': { id: 'building-2', title: '2号研发楼', subtitle: '研发楼功能分区', image: building2Map },
+  'building-3': { id: 'building-3', title: '3号宿舍楼', subtitle: '宿舍楼报警分区', image: building3Map },
+  'building-4': { id: 'building-4', title: '4号仓库', subtitle: '仓储与装卸分区', image: building4Map },
+  external: { id: 'external', title: '外部区域', subtitle: '停车场、周界与出入口', image: externalMap },
+  'floor-1': { id: 'floor-1', title: '1号办公楼 · 1层', subtitle: '楼层防区平面', image: floorMap },
+  'floor-2': { id: 'floor-2', title: '1号办公楼 · 2层', subtitle: '楼层防区平面', image: floorMap },
+  'floor-3': { id: 'floor-3', title: '1号办公楼 · 3层', subtitle: '楼层防区平面', image: floorMap },
+  'floor-4': { id: 'floor-4', title: '1号办公楼 · 4层', subtitle: '楼层防区平面', image: floorMap },
+}
+
+const activeMap = computed(() => mapDefinitions[store.activeMapId] ?? mapDefinitions.overview)
+const mapAreas = computed(() => {
+  const areas: MapArea[] = []
+  store.areas.forEach((area) => {
+    const activePolygon = area.mapPolygons?.[activeMap.value.id] ?? (activeMap.value.id === 'overview' ? area.polygon : undefined)
+    if (activePolygon) areas.push(Object.assign({}, area, { activePolygon }))
+  })
+  return areas
+})
+
+const polygonCenter = (polygon: string) => {
+  const points = polygon.split(' ').map((point) => {
     const [x, y] = point.split(',').map(Number)
     return { x, y }
-  }) ?? []
+  })
   if (points.length === 0) return { x: 0, y: 0 }
   const sum = points.reduce(
     (total, point) => ({
@@ -32,7 +70,11 @@ const labelWidth = (area: SecurityArea) => Math.max(86, area.name.length * 13 + 
 <template>
   <section class="campus-map panel">
     <div class="map-stage">
-      <img src="@/assets/campus-overview.png" alt="园区可视化" />
+      <img :src="activeMap.image" :alt="activeMap.title" />
+      <div class="map-caption">
+        <strong>{{ activeMap.title }}</strong>
+        <span>{{ activeMap.subtitle }}</span>
+      </div>
       <svg
         class="campus-overlay"
         viewBox="0 0 819 542"
@@ -66,13 +108,13 @@ const labelWidth = (area: SecurityArea) => Math.max(86, area.name.length * 13 + 
         >
           <polygon
             class="outline-hit"
-            :points="area.polygon"
+            :points="area.activePolygon"
             fill="transparent"
             pointer-events="all"
           />
           <polygon
             class="outline-glow"
-            :points="area.polygon"
+            :points="area.activePolygon"
             fill="transparent"
             :stroke="statusColors[area.status]"
             filter="url(#buildingGlow)"
@@ -80,7 +122,7 @@ const labelWidth = (area: SecurityArea) => Math.max(86, area.name.length * 13 + 
           />
           <polygon
             class="outline-main"
-            :points="area.polygon"
+            :points="area.activePolygon"
             fill="transparent"
             :stroke="statusColors[area.status]"
             vector-effect="non-scaling-stroke"
@@ -88,13 +130,13 @@ const labelWidth = (area: SecurityArea) => Math.max(86, area.name.length * 13 + 
           <polygon
             v-if="store.selectedAreaId === area.id"
             class="outline-selected"
-            :points="area.polygon"
+            :points="area.activePolygon"
             fill="transparent"
             :stroke="statusColors[area.status]"
             vector-effect="non-scaling-stroke"
           />
 
-          <g class="svg-label" :transform="`translate(${polygonCenter(area).x}, ${polygonCenter(area).y - 38})`">
+          <g class="svg-label" :transform="`translate(${polygonCenter(area.activePolygon).x}, ${polygonCenter(area.activePolygon).y - 38})`">
             <rect
               :x="-labelWidth(area) / 2"
               y="-22"
@@ -148,6 +190,29 @@ img {
   height: 100%;
   object-fit: contain;
   opacity: 0.96;
+}
+
+.map-caption {
+  position: absolute;
+  top: 16px;
+  left: 18px;
+  z-index: 3;
+  display: grid;
+  gap: 4px;
+  border: 1px solid rgba(44, 68, 98, 0.74);
+  border-radius: 8px;
+  background: rgba(7, 17, 31, 0.76);
+  padding: 10px 14px;
+}
+
+.map-caption strong {
+  color: var(--text-primary);
+  font-size: 16px;
+}
+
+.map-caption span {
+  color: var(--text-secondary);
+  font-size: 12px;
 }
 
 .campus-overlay {

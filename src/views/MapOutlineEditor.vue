@@ -4,7 +4,7 @@ import { ElMessage } from 'element-plus/es/components/message/index'
 import { Copy, MousePointer2, Plus, Save, Trash2 } from '@/icons/lucide'
 import PlatformLayout from '@/components/PlatformLayout.vue'
 import { statusColors, statusLabels, useSecurityStore } from '@/stores/security'
-import type { SecurityArea } from '@/types/security'
+import type { SecurityArea, SecurityStatus } from '@/types/security'
 
 interface Point {
   x: number
@@ -22,6 +22,10 @@ const store = useSecurityStore()
 const svgRef = ref<SVGSVGElement>()
 const activePoint = ref<ActivePoint | null>(null)
 const polygonText = ref('')
+const areaName = ref('')
+const areaStatus = ref<SecurityStatus>('armed')
+
+const statusOptions = (Object.entries(statusLabels) as [SecurityStatus, string][]).map(([value, label]) => ({ value, label }))
 
 const editableAreas = computed(() => store.areas.filter((area) => area.type !== 'floor' && area.polygon))
 const selectedEditableArea = computed(() => {
@@ -66,7 +70,7 @@ const updateSelectedPolygon = (points: Point[]) => {
 const beginDrag = (event: PointerEvent, areaId: string, index: number) => {
   event.preventDefault()
   event.stopPropagation()
-  store.selectArea(areaId)
+  store.setActiveMap('overview', areaId)
   activePoint.value = { areaId, index }
   ;(event.currentTarget as SVGCircleElement).setPointerCapture(event.pointerId)
 }
@@ -109,7 +113,30 @@ const applyPolygonText = () => {
     return
   }
   updateSelectedPolygon(points)
-  ElMessage.success('坐标已应用')
+  ElMessage.success('轮廓预览已更新，请点击保存修改')
+}
+
+const saveChanges = () => {
+  const area = selectedEditableArea.value
+  const points = parsePolygon(polygonText.value)
+  if (!area) return
+  if (!areaName.value.trim()) {
+    ElMessage.warning('区域名称不能为空')
+    return
+  }
+  if (points.length < 3) {
+    ElMessage.warning('polygon 坐标至少需要 3 个有效点')
+    return
+  }
+
+  const polygon = stringifyPolygon(points)
+  const saved = store.saveAreaMapSettings(area.id, areaName.value, areaStatus.value, polygon)
+  polygonText.value = polygon
+  if (saved) {
+    ElMessage.success('地图轮廓、区域名称和布防状态已保存')
+  } else {
+    ElMessage.error('浏览器本地存储不可用，修改仅保留在当前会话')
+  }
 }
 
 const copyPolygon = async () => {
@@ -118,15 +145,24 @@ const copyPolygon = async () => {
 }
 
 const selectArea = (area: SecurityArea) => {
-  store.selectArea(area.id)
+  store.setActiveMap('overview', area.id)
 }
+
+watch(
+  () => selectedEditableArea.value?.id,
+  () => {
+    polygonText.value = selectedEditableArea.value?.polygon ?? ''
+    areaName.value = selectedEditableArea.value?.name ?? ''
+    areaStatus.value = selectedEditableArea.value?.status ?? 'armed'
+  },
+  { immediate: true },
+)
 
 watch(
   () => selectedEditableArea.value?.polygon,
   (polygon) => {
     polygonText.value = polygon ?? ''
   },
-  { immediate: true },
 )
 </script>
 
@@ -163,6 +199,10 @@ watch(
           <button type="button" @click="addPoint()">
             <Plus :size="16" />
             新增顶点
+          </button>
+          <button class="primary-action" type="button" @click="saveChanges">
+            <Save :size="16" />
+            保存修改
           </button>
         </div>
 
@@ -211,7 +251,15 @@ watch(
         <div class="panel-title">坐标属性</div>
         <div class="field-group">
           <label>当前区域</label>
-          <strong>{{ selectedEditableArea?.name }}</strong>
+          <input v-model="areaName" class="field-control" maxlength="30" />
+        </div>
+        <div class="field-group">
+          <label>布防状态</label>
+          <select v-model="areaStatus" class="field-control">
+            <option v-for="option in statusOptions" :key="option.value" :value="option.value">
+              {{ option.label }}
+            </option>
+          </select>
         </div>
         <div class="field-group">
           <label>SVG viewBox</label>
@@ -224,7 +272,7 @@ watch(
         <div class="inspector-actions">
           <button type="button" @click="applyPolygonText">
             <Save :size="16" />
-            应用
+            预览轮廓
           </button>
           <button type="button" @click="copyPolygon">
             <Copy :size="16" />
@@ -307,6 +355,10 @@ watch(
   gap: 12px;
 }
 
+.editor-toolbar > div {
+  margin-right: auto;
+}
+
 .editor-toolbar div {
   display: grid;
   gap: 4px;
@@ -334,6 +386,11 @@ watch(
   color: var(--text-primary);
   cursor: pointer;
   padding: 0 14px;
+}
+
+.editor-toolbar button.primary-action {
+  border-color: #1677ff;
+  background: #1677ff;
 }
 
 .map-editor-stage {
@@ -447,6 +504,23 @@ textarea {
   color: var(--text-primary);
   line-height: 1.65;
   padding: 12px;
+}
+
+.field-control {
+  width: 100%;
+  height: 38px;
+  box-sizing: border-box;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  outline: none;
+  background: rgba(4, 12, 23, 0.72);
+  color: var(--text-primary);
+  padding: 0 11px;
+}
+
+.field-control:focus,
+textarea:focus {
+  border-color: rgba(22, 119, 255, 0.78);
 }
 
 .inspector-actions {

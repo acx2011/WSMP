@@ -8,6 +8,7 @@ const nowText = () => {
 }
 
 const makeEventId = () => `${Date.now()}-${Math.random().toString(16).slice(2)}`
+const areaSettingsStorageKey = 'winpoint-security-area-settings'
 
 export const statusLabels: Record<SecurityStatus, string> = {
   armed: '已布防',
@@ -39,8 +40,12 @@ const initialAreas: SecurityArea[] = [
     openZones: 0,
     lastOperator: 'Admin',
     lastOperationTime: '2026-07-13 13:20:00',
-    position: { left: '43%', top: '8.5%' },
-    polygon: '281,75 438,68 468,123 432,203 282,197 255,132',
+    position: { left: '45%', top: '14%' },
+    polygon: '284,76 443,62 492,119 457,210 285,210 254,125',
+    mapPolygons: {
+      overview: '284,76 443,62 492,119 457,210 285,210 254,125',
+      'building-1': '140,96 672,96 704,442 110,442',
+    },
   },
   {
     id: 'building-2',
@@ -53,8 +58,12 @@ const initialAreas: SecurityArea[] = [
     openZones: 2,
     lastOperator: 'Admin',
     lastOperationTime: '2026-07-13 12:44:18',
-    position: { left: '76%', top: '23%' },
-    polygon: '545,180 708,148 751,239 575,292 528,229',
+    position: { left: '72%', top: '25%' },
+    polygon: '545,177 690,158 729,238 566,295 510,226',
+    mapPolygons: {
+      overview: '545,177 690,158 729,238 566,295 510,226',
+      'building-2': '114,126 708,126 728,432 92,432',
+    },
   },
   {
     id: 'building-3',
@@ -68,8 +77,12 @@ const initialAreas: SecurityArea[] = [
     openZones: 1,
     lastOperator: '系统',
     lastOperationTime: '2026-07-13 13:18:21',
-    position: { left: '19%', top: '31%' },
-    polygon: '102,196 242,170 326,317 168,366 83,261',
+    position: { left: '21%', top: '36%' },
+    polygon: '96,188 247,165 312,292 156,349 77,248',
+    mapPolygons: {
+      overview: '96,188 247,165 312,292 156,349 77,248',
+      'building-3': '116,128 698,128 730,418 88,418',
+    },
   },
   {
     id: 'building-4',
@@ -82,8 +95,12 @@ const initialAreas: SecurityArea[] = [
     openZones: 3,
     lastOperator: 'Admin',
     lastOperationTime: '2026-07-13 11:09:52',
-    position: { left: '84%', top: '50%' },
-    polygon: '630,305 773,264 810,374 650,423 578,354',
+    position: { left: '80%', top: '54%' },
+    polygon: '574,304 731,281 776,375 598,430 536,355',
+    mapPolygons: {
+      overview: '574,304 731,281 776,375 598,430 536,355',
+      'building-4': '102,150 716,150 742,410 78,410',
+    },
   },
   {
     id: 'guard',
@@ -96,8 +113,12 @@ const initialAreas: SecurityArea[] = [
     openZones: 0,
     lastOperator: '系统',
     lastOperationTime: '2026-07-13 10:31:05',
-    position: { left: '63%', top: '70%' },
-    polygon: '434,350 526,337 587,398 480,425 415,389',
+    position: { left: '59%', top: '79%' },
+    polygon: '430,423 540,412 584,466 456,500 400,456',
+    mapPolygons: {
+      overview: '430,423 540,412 584,466 456,500 400,456',
+      external: '568,272 714,272 744,386 552,398',
+    },
   },
   {
     id: 'parking',
@@ -110,8 +131,12 @@ const initialAreas: SecurityArea[] = [
     openZones: 0,
     lastOperator: 'Admin',
     lastOperationTime: '2026-07-13 08:00:00',
-    position: { left: '15%', top: '89%' },
-    polygon: '36,365 206,358 238,452 38,455',
+    position: { left: '20%', top: '74%' },
+    polygon: '92,370 282,360 320,461 82,474',
+    mapPolygons: {
+      overview: '92,370 282,360 320,461 82,474',
+      external: '92,120 356,120 378,286 72,300',
+    },
   },
   {
     id: 'perimeter',
@@ -124,8 +149,12 @@ const initialAreas: SecurityArea[] = [
     openZones: 0,
     lastOperator: 'Admin',
     lastOperationTime: '2026-07-13 08:00:00',
-    position: { left: '42%', top: '89%' },
-    polygon: '257,384 398,380 434,442 287,460',
+    position: { left: '44%', top: '80%' },
+    polygon: '286,382 450,372 492,438 314,464',
+    mapPolygons: {
+      overview: '286,382 450,372 492,438 314,464',
+      external: '74,322 746,316 760,386 58,396',
+    },
   },
   {
     id: 'gate',
@@ -138,8 +167,12 @@ const initialAreas: SecurityArea[] = [
     openZones: 0,
     lastOperator: 'Admin',
     lastOperationTime: '2026-07-13 08:00:00',
-    position: { left: '77%', top: '85%' },
-    polygon: '585,393 735,388 760,443 594,462',
+    position: { left: '68%', top: '84%' },
+    polygon: '486,426 620,418 656,482 492,510',
+    mapPolygons: {
+      overview: '486,426 620,418 656,482 492,510',
+      external: '384,126 532,126 552,272 372,286',
+    },
   },
   {
     id: 'floor-1',
@@ -153,6 +186,61 @@ const initialAreas: SecurityArea[] = [
     lastOperator: 'Admin',
     lastOperationTime: '2026-07-13 13:20:00',
     position: { left: '33%', top: '44%' },
+    mapPolygons: {
+      'building-1': '156,330 654,330 680,426 132,426',
+      'floor-1': '96,118 716,118 742,420 74,420',
+    },
+  },
+  {
+    id: 'floor-2',
+    name: '2层',
+    type: 'floor',
+    status: 'armed',
+    online: true,
+    totalZones: 8,
+    alarmZones: 0,
+    openZones: 0,
+    lastOperator: 'Admin',
+    lastOperationTime: '2026-07-13 13:20:00',
+    position: { left: '33%', top: '38%' },
+    mapPolygons: {
+      'building-1': '164,252 646,252 670,322 140,322',
+      'floor-2': '96,118 716,118 742,420 74,420',
+    },
+  },
+  {
+    id: 'floor-3',
+    name: '3层',
+    type: 'floor',
+    status: 'armed',
+    online: true,
+    totalZones: 8,
+    alarmZones: 0,
+    openZones: 0,
+    lastOperator: 'Admin',
+    lastOperationTime: '2026-07-13 13:20:00',
+    position: { left: '33%', top: '32%' },
+    mapPolygons: {
+      'building-1': '172,174 638,174 660,244 148,244',
+      'floor-3': '96,118 716,118 742,420 74,420',
+    },
+  },
+  {
+    id: 'floor-4',
+    name: '4层',
+    type: 'floor',
+    status: 'armed',
+    online: true,
+    totalZones: 8,
+    alarmZones: 0,
+    openZones: 0,
+    lastOperator: 'Admin',
+    lastOperationTime: '2026-07-13 13:20:00',
+    position: { left: '33%', top: '26%' },
+    mapPolygons: {
+      'building-1': '180,100 630,100 650,166 156,166',
+      'floor-4': '96,118 716,118 742,420 74,420',
+    },
   },
 ]
 
@@ -204,18 +292,59 @@ const initialEvents: SecurityEvent[] = [
   },
 ]
 
+interface PersistedAreaSettings {
+  id: string
+  name: string
+  status: SecurityStatus
+  polygon?: string
+}
+
+const loadAreas = (): SecurityArea[] => {
+  const areas = structuredClone(initialAreas)
+  if (typeof window === 'undefined') return areas
+
+  try {
+    const saved = JSON.parse(window.localStorage.getItem(areaSettingsStorageKey) ?? '[]') as PersistedAreaSettings[]
+    saved.forEach((settings) => {
+      const area = areas.find((item) => item.id === settings.id)
+      if (!area) return
+      area.name = settings.name
+      area.status = settings.status
+      area.online = settings.status !== 'offline'
+      area.alarmZones = settings.status === 'alarm' ? Math.max(1, area.alarmZones) : 0
+      area.openZones = settings.status === 'disarmed' || settings.status === 'partially_disarmed' ? Math.max(1, area.openZones) : 0
+      if (settings.polygon) {
+        area.polygon = settings.polygon
+        area.mapPolygons = { ...area.mapPolygons, overview: settings.polygon }
+      }
+    })
+  } catch {
+    window.localStorage.removeItem(areaSettingsStorageKey)
+  }
+
+  return areas
+}
+
 interface SecurityState {
   areas: SecurityArea[]
   selectedAreaId: string
+  activeMapId: string
   events: SecurityEvent[]
   activeEventFilter: 'all' | SecurityEventType
   sidebarCollapsed: boolean
 }
 
+const mapIdForArea = (area: SecurityArea) => {
+  if (area.type === 'floor') return area.id
+  if (area.type === 'external' || area.id === 'guard') return 'external'
+  return area.id
+}
+
 export const useSecurityStore = defineStore('security', {
   state: (): SecurityState => ({
-    areas: structuredClone(initialAreas),
+    areas: loadAreas(),
     selectedAreaId: 'floor-1',
+    activeMapId: 'overview',
     events: structuredClone(initialEvents),
     activeEventFilter: 'all',
     sidebarCollapsed: false,
@@ -237,11 +366,44 @@ export const useSecurityStore = defineStore('security', {
   },
   actions: {
     selectArea(areaId: string) {
-      if (this.areas.some((area) => area.id === areaId)) this.selectedAreaId = areaId
+      const area = this.areas.find((item) => item.id === areaId)
+      if (area) {
+        this.selectedAreaId = areaId
+        this.activeMapId = mapIdForArea(area)
+      }
+    },
+    setActiveMap(mapId: string, selectedAreaId?: string) {
+      this.activeMapId = mapId
+      if (selectedAreaId && this.areas.some((area) => area.id === selectedAreaId)) this.selectedAreaId = selectedAreaId
     },
     updateAreaPolygon(areaId: string, polygon: string) {
       const area = this.areas.find((item) => item.id === areaId)
-      if (area) area.polygon = polygon
+      if (!area) return
+      area.polygon = polygon
+      area.mapPolygons = { ...area.mapPolygons, overview: polygon }
+    },
+    saveAreaMapSettings(areaId: string, name: string, status: SecurityStatus, polygon: string) {
+      const area = this.areas.find((item) => item.id === areaId)
+      if (!area) return false
+
+      area.name = name.trim()
+      area.status = status
+      area.online = status !== 'offline'
+      area.alarmZones = status === 'alarm' ? Math.max(1, area.alarmZones) : 0
+      area.openZones = status === 'disarmed' || status === 'partially_disarmed' ? Math.max(1, area.openZones) : 0
+      area.lastOperator = 'Admin'
+      area.lastOperationTime = nowText()
+      this.updateAreaPolygon(areaId, polygon)
+
+      const settings: PersistedAreaSettings[] = this.areas
+        .filter((item) => item.type !== 'floor' && item.polygon)
+        .map((item) => ({ id: item.id, name: item.name, status: item.status, polygon: item.polygon }))
+      try {
+        window.localStorage.setItem(areaSettingsStorageKey, JSON.stringify(settings))
+        return true
+      } catch {
+        return false
+      }
     },
     setEventFilter(filter: 'all' | SecurityEventType) {
       this.activeEventFilter = filter

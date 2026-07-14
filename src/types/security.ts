@@ -27,6 +27,7 @@ export interface SecurityArea {
     top: string
   }
   polygon?: string
+  mapPolygons?: Partial<Record<string, string>>
 }
 
 export interface SecurityEvent {

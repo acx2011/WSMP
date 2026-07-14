@@ -9,7 +9,21 @@ import { useSecurityStore } from '@/stores/security'
 const store = useSecurityStore()
 const bypassVisible = ref(false)
 const bypassReason = ref('')
+const drawerMode = ref<'zones' | 'history' | null>(null)
 const area = computed(() => store.selectedArea)
+const zoneRows = computed(() =>
+  Array.from({ length: Math.min(area.value.totalZones, 8) }, (_, index) => {
+    const zoneNumber = index + 1
+    const alarm = zoneNumber <= area.value.alarmZones
+    const open = !alarm && zoneNumber <= area.value.openZones
+    return {
+      id: `${area.value.id}-Z${String(zoneNumber).padStart(2, '0')}`,
+      name: `${area.value.name}-${zoneNumber}号防区`,
+      status: alarm ? '报警' : open ? '未关闭' : '正常',
+    }
+  }),
+)
+const areaHistory = computed(() => store.events.filter((event) => event.areaId === area.value.id).slice(0, 8))
 
 const infoRows = computed(() => [
   ['区域名称', area.value.name],
@@ -41,8 +55,12 @@ const submitBypass = () => {
 }
 
 const handleMore = (command: string) => {
-  if (command === '查看防区' || command === '查看历史') {
-    ElMessage.info(command)
+  if (command === '查看防区') {
+    drawerMode.value = 'zones'
+    return
+  }
+  if (command === '查看历史') {
+    drawerMode.value = 'history'
     return
   }
   if (command === '模拟报警') store.triggerAlarm(area.value.id)
@@ -97,6 +115,27 @@ const handleMore = (command: string) => {
         <el-button type="primary" @click="submitBypass">确认旁路</el-button>
       </template>
     </el-dialog>
+
+    <el-drawer
+      :model-value="drawerMode !== null"
+      :title="drawerMode === 'zones' ? '防区列表' : '区域历史'"
+      size="420px"
+      @update:model-value="(visible: boolean) => { if (!visible) drawerMode = null }"
+    >
+      <div v-if="drawerMode === 'zones'" class="detail-list">
+        <article v-for="zone in zoneRows" :key="zone.id">
+          <strong>{{ zone.name }}</strong>
+          <span :class="zone.status">{{ zone.status }}</span>
+        </article>
+      </div>
+      <div v-else class="detail-list">
+        <article v-for="event in areaHistory" :key="event.id">
+          <strong>{{ event.description }}</strong>
+          <span>{{ event.time }} · {{ event.operator }}</span>
+        </article>
+        <p v-if="areaHistory.length === 0">暂无历史事件</p>
+      </div>
+    </el-drawer>
   </section>
 </template>
 
@@ -162,5 +201,38 @@ const handleMore = (command: string) => {
 
 .area-actions :deep(.el-dropdown) {
   width: 100%;
+}
+
+.detail-list {
+  display: grid;
+  gap: 10px;
+}
+
+.detail-list article {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 12px;
+}
+
+.detail-list strong {
+  color: var(--text-primary);
+}
+
+.detail-list span,
+.detail-list p {
+  color: var(--text-secondary);
+}
+
+.detail-list .报警 {
+  color: var(--alarm);
+}
+
+.detail-list .未关闭 {
+  color: var(--partial);
 }
 </style>

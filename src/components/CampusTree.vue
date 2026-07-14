@@ -60,11 +60,14 @@ const filteredData = computed(() => {
 const handleNodeClick = (node: TreeNode) => {
   const directMap: Record<string, string> = {
     'building-1-node': 'building-1',
-    park: 'building-1',
-    'external-node': 'parking',
-    'floor-2': 'building-1',
-    'floor-3': 'building-1',
-    'floor-4': 'building-1',
+  }
+  if (node.id === 'park') {
+    store.setActiveMap('overview', 'building-1')
+    return
+  }
+  if (node.id === 'external-node') {
+    store.setActiveMap('external', 'parking')
+    return
   }
   store.selectArea(directMap[node.id] ?? node.id)
 }
@@ -92,7 +95,16 @@ const handleNodeClick = (node: TreeNode) => {
       @node-click="handleNodeClick"
     >
       <template #default="{ data }">
-        <span class="tree-node" :class="{ selected: store.selectedAreaId === data.id || (data.id === 'building-1-node' && store.selectedAreaId === 'building-1') }">
+        <span
+          class="tree-node"
+          :class="{
+            selected:
+              store.selectedAreaId === data.id ||
+              (data.id === 'building-1-node' && store.selectedAreaId === 'building-1') ||
+              (data.id === 'external-node' && store.activeMapId === 'external') ||
+              (data.id === 'park' && store.activeMapId === 'overview'),
+          }"
+        >
           {{ data.label }}
         </span>
       </template>

@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ElMessage } from 'element-plus/es/components/message/index'
+import { computed, ref } from 'vue'
 import type { SecurityEventType } from '@/types/security'
 import { useSecurityStore } from '@/stores/security'
 
 const store = useSecurityStore()
+const drawerVisible = ref(false)
 
 const filters: Array<{ label: string; value: 'all' | SecurityEventType }> = [
   { label: '全部事件', value: 'all' },
@@ -12,6 +13,7 @@ const filters: Array<{ label: string; value: 'all' | SecurityEventType }> = [
   { label: '撤防', value: 'disarm' },
   { label: '故障', value: 'fault' },
   { label: '恢复', value: 'restore' },
+  { label: '旁路', value: 'bypass' },
 ]
 
 const eventLabels: Record<SecurityEventType, string> = {
@@ -22,6 +24,15 @@ const eventLabels: Record<SecurityEventType, string> = {
   restore: '恢复',
   bypass: '旁路',
 }
+
+const eventSummary = computed(() =>
+  filters
+    .filter((filter) => filter.value !== 'all')
+    .map((filter) => ({
+      label: filter.label,
+      value: store.events.filter((event) => event.type === filter.value).length,
+    })),
+)
 </script>
 
 <template>
@@ -29,7 +40,7 @@ const eventLabels: Record<SecurityEventType, string> = {
     <div class="events-head">
       <div class="panel-title">
         <span>实时事件</span>
-        <button class="link-action" type="button" @click="ElMessage.info('更多事件功能开发中')">更多</button>
+        <button class="link-action" type="button" @click="drawerVisible = true">更多</button>
       </div>
       <div class="filter-tabs">
         <button
@@ -63,6 +74,28 @@ const eventLabels: Record<SecurityEventType, string> = {
       </div>
     </div>
   </section>
+
+  <el-drawer v-model="drawerVisible" title="实时事件总览" size="420px">
+    <div class="event-drawer">
+      <div class="summary-grid">
+        <article v-for="item in eventSummary" :key="item.label">
+          <span>{{ item.label }}</span>
+          <strong>{{ item.value }}</strong>
+        </article>
+      </div>
+      <div class="drawer-actions">
+        <button type="button" @click="store.setEventFilter('all')">显示全部</button>
+        <button type="button" @click="store.setEventFilter('alarm')">只看报警</button>
+      </div>
+      <div class="drawer-list">
+        <article v-for="event in store.events" :key="event.id">
+          <span>{{ event.time }}</span>
+          <strong :class="event.type">{{ eventLabels[event.type] }} · {{ event.areaName }}</strong>
+          <p>{{ event.description }} / {{ event.operator }}</p>
+        </article>
+      </div>
+    </div>
+  </el-drawer>
 </template>
 
 <style scoped lang="scss">
@@ -165,5 +198,64 @@ const eventLabels: Record<SecurityEventType, string> = {
 
 .bypass {
   color: #ffad42;
+}
+
+.event-drawer {
+  display: grid;
+  gap: 16px;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.summary-grid article,
+.drawer-list article {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 12px;
+}
+
+.summary-grid span,
+.drawer-list span,
+.drawer-list p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.summary-grid strong {
+  display: block;
+  margin-top: 6px;
+  color: var(--text-primary);
+  font-size: 24px;
+}
+
+.drawer-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.drawer-actions button {
+  height: 32px;
+  border: 1px solid rgba(22, 119, 255, 0.56);
+  border-radius: 8px;
+  background: rgba(22, 119, 255, 0.13);
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 0 12px;
+}
+
+.drawer-list {
+  display: grid;
+  gap: 10px;
+}
+
+.drawer-list strong {
+  display: block;
+  margin: 6px 0;
 }
 </style>

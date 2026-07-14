@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 819 542">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#0b1728"/><stop offset="1" stop-color="#07111f"/></linearGradient>
+    <linearGradient id="block" x1="0" x2="1"><stop offset="0" stop-color="#241b2a"/><stop offset="1" stop-color="#3b2b40"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="819" height="542" fill="url(#bg)"/>
+  <g opacity=".2" stroke="#1677ff"><path d="M0 88H819M0 176H819M0 264H819M0 352H819M0 440H819"/><path d="M88 0V542M176 0V542M264 0V542M352 0V542M440 0V542M528 0V542M616 0V542M704 0V542"/></g>
+  <path d="M88 418h642" stroke="#263d56" stroke-width="24" opacity=".65"/>
+  <g filter="url(#glow)">
+    <path d="M116 128h582l32 290H88z" fill="url(#block)" stroke="#2d8cff" stroke-width="2"/>
+    <path d="M158 178h480M150 248h496M140 318h520" stroke="#8bb9df" opacity=".42"/>
+    <path d="M232 166v226M404 166v226M576 166v226" stroke="#8bb9df" opacity=".35"/>
+    <circle cx="530" cy="242" r="26" fill="#e53935" opacity=".22" stroke="#e53935"/>
+  </g>
+  <text x="410" y="58" fill="#dbefff" font-size="24" font-family="Microsoft YaHei, sans-serif" text-anchor="middle">3号宿舍楼分区图</text>
+  <text x="410" y="508" fill="#7f9bb8" font-size="14" font-family="Microsoft YaHei, sans-serif" text-anchor="middle">走廊 · 东侧宿舍 · 公共区域</text>
+</svg>

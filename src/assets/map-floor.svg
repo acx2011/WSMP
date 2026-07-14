@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 819 542">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#0b1728"/><stop offset="1" stop-color="#07111f"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="819" height="542" fill="url(#bg)"/>
+  <g opacity=".22" stroke="#1677ff"><path d="M0 80H819M0 160H819M0 240H819M0 320H819M0 400H819M0 480H819"/><path d="M80 0V542M160 0V542M240 0V542M320 0V542M400 0V542M480 0V542M560 0V542M640 0V542M720 0V542"/></g>
+  <g filter="url(#glow)">
+    <path d="M96 118h620l26 302H74z" fill="#0d1b2c" stroke="#2d8cff" stroke-width="2"/>
+    <path d="M142 164h166v92H142zM346 164h168v92H346zM550 164h132v92H550zM142 304h196v70H142zM376 304h132v70H376zM546 304h136v70H546z" fill="#14273c" stroke="#6aa8da" opacity=".82"/>
+    <path d="M116 278h590" stroke="#6aa8da" opacity=".45"/>
+    <path d="M330 138v260M530 138v260" stroke="#6aa8da" opacity=".28"/>
+  </g>
+  <circle cx="694" cy="132" r="38" fill="none" stroke="#38b249" opacity=".38"/>
+  <text x="410" y="58" fill="#dbefff" font-size="24" font-family="Microsoft YaHei, sans-serif" text-anchor="middle">办公楼楼层防区平面</text>
+  <text x="410" y="508" fill="#7f9bb8" font-size="14" font-family="Microsoft YaHei, sans-serif" text-anchor="middle">办公区 · 走廊 · 机房 · 消防通道</text>
+</svg>

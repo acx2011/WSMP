@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 819 542">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#0b1728"/><stop offset="1" stop-color="#07111f"/></linearGradient>
+    <linearGradient id="block" x1="0" x2="1"><stop offset="0" stop-color="#17243a"/><stop offset="1" stop-color="#283f58"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="819" height="542" fill="url(#bg)"/>
+  <g opacity=".22" stroke="#1677ff"><path d="M0 90H819M0 180H819M0 270H819M0 360H819M0 450H819"/><path d="M90 0V542M180 0V542M270 0V542M360 0V542M450 0V542M540 0V542M630 0V542M720 0V542"/></g>
+  <path d="M74 460h670" stroke="#263d56" stroke-width="26" opacity=".65"/>
+  <g filter="url(#glow)">
+    <path d="M114 126h594l20 306H92z" fill="url(#block)" stroke="#2d8cff" stroke-width="2"/>
+    <path d="M168 176h130v206H168zM344 176h130v206H344zM520 176h130v206H520z" fill="#0d1b2c" stroke="#6aa8da" opacity=".8"/>
+    <path d="M114 246h614" stroke="#6aa8da" opacity=".45"/>
+  </g>
+  <text x="410" y="58" fill="#dbefff" font-size="24" font-family="Microsoft YaHei, sans-serif" text-anchor="middle">2号研发楼分区图</text>
+  <text x="410" y="508" fill="#7f9bb8" font-size="14" font-family="Microsoft YaHei, sans-serif" text-anchor="middle">实验区 · 办公网 · 机房区</text>
+</svg>
