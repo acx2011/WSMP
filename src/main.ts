@@ -22,14 +22,23 @@ import 'element-plus/es/components/tree/style/css'
 import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
+import { useSecurityStore } from './stores/security'
 import './styles/variables.scss'
 import './styles/global.scss'
 import './styles/transitions.scss'
 
 const app = createApp(App)
+const pinia = createPinia()
 
 ;[ElBadge, ElButton, ElDialog, ElDrawer, ElDropdown, ElDropdownItem, ElDropdownMenu, ElInput, ElSwitch, ElTree].forEach((component) => {
   app.use(component)
 })
 
-app.use(createPinia()).use(router).mount('#app')
+app.use(pinia).use(router)
+
+const bootstrap = async () => {
+  await useSecurityStore(pinia).hydrateAreaSettings()
+  app.mount('#app')
+}
+
+void bootstrap()

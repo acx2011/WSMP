@@ -12,11 +12,16 @@ interface UserRow {
   permissions: string[]
 }
 
-const users = ref<UserRow[]>([
+const initialUsers: Omit<UserRow, 'permissions'>[] = [
   { name: 'Admin', role: '系统管理员', status: '启用', lastLogin: '2026-07-13 13:50:20' },
   { name: 'Operator01', role: '值班员', status: '启用', lastLogin: '2026-07-13 09:12:11' },
   { name: 'Auditor', role: '审计员', status: '停用', lastLogin: '2026-07-10 17:42:03' },
-].map((user) => ({ ...user, permissions: user.role === '审计员' ? ['事件记录', '系统日志'] : ['园区总览', '报警监控', '布防管理', '事件记录'] })))
+]
+
+const users = ref<UserRow[]>(initialUsers.map((user) => ({
+  ...user,
+  permissions: user.role === '审计员' ? ['事件记录', '系统日志'] : ['园区总览', '报警监控', '布防管理', '事件记录'],
+})))
 
 const createVisible = ref(false)
 const permissionVisible = ref(false)

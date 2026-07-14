@@ -54,6 +54,17 @@ Build output directory: dist
 
 项目包含 `public/_redirects`，构建后会输出到 `dist/_redirects`，用于支持 Vue Router history 模式下的页面刷新和子路由直达。
 
+### 地图配置持久化
+
+地图轮廓、区域名称和布防状态通过 Cloudflare Pages Function 保存到 Workers KV。首次部署时需要在 Cloudflare 中完成一次绑定：
+
+1. 创建 Workers KV 命名空间，例如 `wsmp-config`。
+2. 打开 `Workers & Pages > WSMP > Settings > Bindings`。
+3. 新增 KV namespace binding，变量名必须为 `WSMP_CONFIG`。
+4. Production 和 Preview 环境分别绑定后，重新部署项目。
+
+绑定成功后，地图编辑器显示“云端已连接”，保存结果会在不同浏览器和设备间共享。未配置 KV 或本地接口不可用时，页面会明确显示“仅本机保存”，并回退到浏览器本地存储。
+
 ## 当前功能
 
 - 园区总览控制台
@@ -75,6 +86,7 @@ Build output directory: dist
 - 页面路由在 `src/router/index.ts`。
 - 园区底图为 `src/assets/campus-overview.png`。
 - 建筑轮廓坐标保存在 `SecurityArea.polygon`，坐标系与底图 SVG `viewBox="0 0 819 542"` 对齐。
+- 云端地图配置接口位于 `functions/api/security-settings.ts`。
 
 ## 提交注意
 
@@ -85,8 +97,7 @@ Build output directory: dist
 - `.pnpm-store/`
 - `*.tsbuildinfo`
 
-## 已知问题
+## 验证状态
 
-- 当前运行态页面验证正常。
 - `pnpm run build` 已验证通过。
-- `pnpm run typecheck` 在当前 Codex 本机环境中可能长时间无输出，后续需要继续排查 TypeScript/Vue 类型检查性能问题；现阶段不要把它作为阻塞团队预览的必跑命令。
+- `pnpm run typecheck` 已验证通过。

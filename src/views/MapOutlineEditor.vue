@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus/es/components/message/index'
-import { Copy, MousePointer2, Plus, Save, Trash2 } from '@/icons/lucide'
+import { Copy, Download, MousePointer2, Plus, Save, Trash2, Upload } from '@/icons/lucide'
 import PlatformLayout from '@/components/PlatformLayout.vue'
 import { statusColors, statusLabels, useSecurityStore } from '@/stores/security'
 import type { SecurityArea, SecurityStatus } from '@/types/security'
@@ -24,6 +24,14 @@ const activePoint = ref<ActivePoint | null>(null)
 const polygonText = ref('')
 const areaName = ref('')
 const areaStatus = ref<SecurityStatus>('armed')
+const saving = ref(false)
+const importInputRef = ref<HTMLInputElement>()
+
+const persistenceLabel = computed(() => ({
+  loading: '正在连接云端',
+  cloud: '云端已连接',
+  local: '仅本机保存',
+})[store.areaSettingsPersistence])
 
 const statusOptions = (Object.entries(statusLabels) as [SecurityStatus, string][]).map(([value, label]) => ({ value, label }))
 
@@ -116,7 +124,7 @@ const applyPolygonText = () => {
   ElMessage.success('轮廓预览已更新，请点击保存修改')
 }
 
-const saveChanges = () => {
+const saveChanges = async () => {
   const area = selectedEditableArea.value
   const points = parsePolygon(polygonText.value)
   if (!area) return
@@ -129,19 +137,63 @@ const saveChanges = () => {
     return
   }
 
-  const polygon = stringifyPolygon(points)
-  const saved = store.saveAreaMapSettings(area.id, areaName.value, areaStatus.value, polygon)
-  polygonText.value = polygon
-  if (saved) {
-    ElMessage.success('地图轮廓、区域名称和布防状态已保存')
-  } else {
-    ElMessage.error('浏览器本地存储不可用，修改仅保留在当前会话')
+  saving.value = true
+  try {
+    const polygon = stringifyPolygon(points)
+    const result = await store.saveAreaMapSettings(area.id, areaName.value, areaStatus.value, polygon)
+    polygonText.value = polygon
+    if (result === 'cloud') {
+      ElMessage.success('地图轮廓、区域名称和布防状态已保存到云端')
+    } else if (result === 'local') {
+      ElMessage.warning('云端存储暂不可用，修改仅保存在当前浏览器')
+    } else {
+      ElMessage.error('保存失败，请稍后重试')
+    }
+  } finally {
+    saving.value = false
   }
 }
 
 const copyPolygon = async () => {
   await navigator.clipboard.writeText(selectedEditableArea.value?.polygon ?? '')
   ElMessage.success('polygon 坐标已复制')
+}
+
+const exportSettings = () => {
+  const contents = JSON.stringify(store.getPersistedAreaSettings(), null, 2)
+  const url = URL.createObjectURL(new Blob([contents], { type: 'application/json' }))
+  const link = document.createElement('a')
+  link.href = url
+  link.download = `winpoint-map-settings-${new Date().toISOString().slice(0, 10)}.json`
+  link.click()
+  URL.revokeObjectURL(url)
+  ElMessage.success('全部地图配置已导出')
+}
+
+const importSettings = async (event: Event) => {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  input.value = ''
+  if (!file) return
+
+  saving.value = true
+  try {
+    const parsed = JSON.parse(await file.text()) as unknown
+    const result = await store.importAreaMapSettings(parsed)
+    if (result === 'failed') {
+      ElMessage.error('配置文件格式无效，未导入任何修改')
+      return
+    }
+    polygonText.value = selectedEditableArea.value?.polygon ?? ''
+    areaName.value = selectedEditableArea.value?.name ?? ''
+    areaStatus.value = selectedEditableArea.value?.status ?? 'armed'
+    if (result === 'cloud') ElMessage.success('全部地图配置已导入并保存到云端')
+    else ElMessage.warning('配置已导入，但云端不可用，仅保存在当前浏览器')
+  } catch {
+    ElMessage.error('无法读取配置文件，请选择有效的 JSON 文件')
+  } finally {
+    saving.value = false
+  }
 }
 
 const selectArea = (area: SecurityArea) => {
@@ -194,15 +246,18 @@ watch(
         <div class="editor-toolbar">
           <div>
             <strong>地图轮廓编辑</strong>
-            <span>{{ selectedEditableArea?.name }} · {{ selectedPoints.length }} 个顶点</span>
+            <span>
+              {{ selectedEditableArea?.name }} · {{ selectedPoints.length }} 个顶点
+              <i class="sync-state" :class="store.areaSettingsPersistence">{{ persistenceLabel }}</i>
+            </span>
           </div>
           <button type="button" @click="addPoint()">
             <Plus :size="16" />
             新增顶点
           </button>
-          <button class="primary-action" type="button" @click="saveChanges">
+          <button class="primary-action" type="button" :disabled="saving" @click="saveChanges">
             <Save :size="16" />
-            保存修改
+            {{ saving ? '正在保存' : '保存修改' }}
           </button>
         </div>
 
@@ -278,7 +333,16 @@ watch(
             <Copy :size="16" />
             复制
           </button>
+          <button type="button" @click="exportSettings">
+            <Download :size="16" />
+            导出全部
+          </button>
+          <button type="button" @click="importInputRef?.click()">
+            <Upload :size="16" />
+            导入配置
+          </button>
         </div>
+        <input ref="importInputRef" class="file-input" type="file" accept="application/json,.json" @change="importSettings" />
         <div class="hint">
           <Trash2 :size="16" />
           拖动圆点调整坐标，双击地图新增顶点，右键顶点删除。
@@ -373,6 +437,31 @@ watch(
   font-size: 13px;
 }
 
+.sync-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: 10px;
+  color: #e19a18;
+  font-style: normal;
+}
+
+.sync-state::before {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  content: "";
+}
+
+.sync-state.cloud {
+  color: #57c667;
+}
+
+.sync-state.loading {
+  color: #6eb2ff;
+}
+
 .editor-toolbar button,
 .inspector-actions button {
   display: inline-flex;
@@ -391,6 +480,11 @@ watch(
 .editor-toolbar button.primary-action {
   border-color: #1677ff;
   background: #1677ff;
+}
+
+.editor-toolbar button:disabled {
+  cursor: wait;
+  opacity: 0.62;
 }
 
 .map-editor-stage {
@@ -527,6 +621,10 @@ textarea:focus {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
+}
+
+.file-input {
+  display: none;
 }
 
 .hint {

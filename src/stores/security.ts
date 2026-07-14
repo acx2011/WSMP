@@ -9,6 +9,7 @@ const nowText = () => {
 
 const makeEventId = () => `${Date.now()}-${Math.random().toString(16).slice(2)}`
 const areaSettingsStorageKey = 'winpoint-security-area-settings'
+const areaSettingsApiUrl = '/api/security-settings'
 
 export const statusLabels: Record<SecurityStatus, string> = {
   armed: '已布防',
@@ -292,36 +293,74 @@ const initialEvents: SecurityEvent[] = [
   },
 ]
 
-interface PersistedAreaSettings {
+export interface PersistedAreaSettings {
   id: string
   name: string
   status: SecurityStatus
   polygon?: string
 }
 
-const loadAreas = (): SecurityArea[] => {
-  const areas = structuredClone(initialAreas)
-  if (typeof window === 'undefined') return areas
+interface AreaSettingsResponse {
+  areas: PersistedAreaSettings[]
+}
 
+export type AreaSettingsPersistence = 'loading' | 'cloud' | 'local'
+export type AreaSettingsSaveResult = 'cloud' | 'local' | 'failed'
+
+const applyAreaSettings = (areas: SecurityArea[], saved: PersistedAreaSettings[]) => {
+  saved.forEach((settings) => {
+    const area = areas.find((item) => item.id === settings.id)
+    if (!area) return
+    area.name = settings.name
+    area.status = settings.status
+    area.online = settings.status !== 'offline'
+    area.alarmZones = settings.status === 'alarm' ? Math.max(1, area.alarmZones) : 0
+    area.openZones = settings.status === 'disarmed' || settings.status === 'partially_disarmed' ? Math.max(1, area.openZones) : 0
+    if (settings.polygon) {
+      area.polygon = settings.polygon
+      area.mapPolygons = { ...area.mapPolygons, overview: settings.polygon }
+    }
+  })
+}
+
+const readLocalAreaSettings = (): PersistedAreaSettings[] => {
+  if (typeof window === 'undefined') return []
   try {
     const saved = JSON.parse(window.localStorage.getItem(areaSettingsStorageKey) ?? '[]') as PersistedAreaSettings[]
-    saved.forEach((settings) => {
-      const area = areas.find((item) => item.id === settings.id)
-      if (!area) return
-      area.name = settings.name
-      area.status = settings.status
-      area.online = settings.status !== 'offline'
-      area.alarmZones = settings.status === 'alarm' ? Math.max(1, area.alarmZones) : 0
-      area.openZones = settings.status === 'disarmed' || settings.status === 'partially_disarmed' ? Math.max(1, area.openZones) : 0
-      if (settings.polygon) {
-        area.polygon = settings.polygon
-        area.mapPolygons = { ...area.mapPolygons, overview: settings.polygon }
-      }
-    })
+    return Array.isArray(saved) ? saved : []
   } catch {
     window.localStorage.removeItem(areaSettingsStorageKey)
+    return []
   }
+}
 
+const writeLocalAreaSettings = (settings: PersistedAreaSettings[]) => {
+  try {
+    window.localStorage.setItem(areaSettingsStorageKey, JSON.stringify(settings))
+    return true
+  } catch {
+    return false
+  }
+}
+
+const isPersistedAreaSettings = (value: unknown): value is PersistedAreaSettings => {
+  if (!value || typeof value !== 'object') return false
+  const candidate = value as Partial<PersistedAreaSettings>
+  if (typeof candidate.id !== 'string' || typeof candidate.name !== 'string' || !candidate.name.trim()) return false
+  if (typeof candidate.status !== 'string' || !(candidate.status in statusLabels)) return false
+  if (typeof candidate.polygon !== 'string') return false
+  const points = candidate.polygon.trim().split(/\s+/)
+  return points.length >= 3 && points.every((point) => {
+    const [xText, yText, extra] = point.split(',')
+    const x = Number(xText)
+    const y = Number(yText)
+    return extra === undefined && Number.isFinite(x) && Number.isFinite(y) && x >= 0 && x <= 819 && y >= 0 && y <= 542
+  })
+}
+
+const loadAreas = (): SecurityArea[] => {
+  const areas = structuredClone(initialAreas)
+  applyAreaSettings(areas, readLocalAreaSettings())
   return areas
 }
 
@@ -332,6 +371,7 @@ interface SecurityState {
   events: SecurityEvent[]
   activeEventFilter: 'all' | SecurityEventType
   sidebarCollapsed: boolean
+  areaSettingsPersistence: AreaSettingsPersistence
 }
 
 const mapIdForArea = (area: SecurityArea) => {
@@ -348,6 +388,7 @@ export const useSecurityStore = defineStore('security', {
     events: structuredClone(initialEvents),
     activeEventFilter: 'all',
     sidebarCollapsed: false,
+    areaSettingsPersistence: 'loading',
   }),
   getters: {
     selectedArea: (state) => state.areas.find((area) => area.id === state.selectedAreaId) ?? state.areas[0],
@@ -382,9 +423,53 @@ export const useSecurityStore = defineStore('security', {
       area.polygon = polygon
       area.mapPolygons = { ...area.mapPolygons, overview: polygon }
     },
-    saveAreaMapSettings(areaId: string, name: string, status: SecurityStatus, polygon: string) {
+    getPersistedAreaSettings(): PersistedAreaSettings[] {
+      return this.areas
+        .filter((item) => item.type !== 'floor' && item.polygon)
+        .map((item) => ({ id: item.id, name: item.name, status: item.status, polygon: item.polygon }))
+    },
+    async persistAreaSettings(): Promise<AreaSettingsSaveResult> {
+      const settings = this.getPersistedAreaSettings()
+      const localSaved = writeLocalAreaSettings(settings)
+      try {
+        const response = await fetch(areaSettingsApiUrl, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ areas: settings }),
+        })
+        if (!response.ok) throw new Error(`Area settings save failed: ${response.status}`)
+        this.areaSettingsPersistence = 'cloud'
+        return 'cloud'
+      } catch {
+        this.areaSettingsPersistence = 'local'
+        return localSaved ? 'local' : 'failed'
+      }
+    },
+    async hydrateAreaSettings() {
+      const controller = new AbortController()
+      const timeoutId = window.setTimeout(() => controller.abort(), 5000)
+      try {
+        const response = await fetch(areaSettingsApiUrl, {
+          headers: { Accept: 'application/json' },
+          signal: controller.signal,
+        })
+        if (!response.ok) throw new Error(`Area settings request failed: ${response.status}`)
+        const payload = await response.json() as AreaSettingsResponse
+        if (!Array.isArray(payload.areas)) throw new Error('Invalid area settings response')
+        if (payload.areas.length > 0) {
+          applyAreaSettings(this.areas, payload.areas)
+          writeLocalAreaSettings(payload.areas)
+        }
+        this.areaSettingsPersistence = 'cloud'
+      } catch {
+        this.areaSettingsPersistence = 'local'
+      } finally {
+        window.clearTimeout(timeoutId)
+      }
+    },
+    async saveAreaMapSettings(areaId: string, name: string, status: SecurityStatus, polygon: string): Promise<AreaSettingsSaveResult> {
       const area = this.areas.find((item) => item.id === areaId)
-      if (!area) return false
+      if (!area) return 'failed'
 
       area.name = name.trim()
       area.status = status
@@ -394,16 +479,16 @@ export const useSecurityStore = defineStore('security', {
       area.lastOperator = 'Admin'
       area.lastOperationTime = nowText()
       this.updateAreaPolygon(areaId, polygon)
-
-      const settings: PersistedAreaSettings[] = this.areas
-        .filter((item) => item.type !== 'floor' && item.polygon)
-        .map((item) => ({ id: item.id, name: item.name, status: item.status, polygon: item.polygon }))
-      try {
-        window.localStorage.setItem(areaSettingsStorageKey, JSON.stringify(settings))
-        return true
-      } catch {
-        return false
+      return this.persistAreaSettings()
+    },
+    async importAreaMapSettings(value: unknown): Promise<AreaSettingsSaveResult> {
+      if (!Array.isArray(value) || value.length === 0 || !value.every(isPersistedAreaSettings)) return 'failed'
+      const uniqueIds = new Set(value.map((settings) => settings.id))
+      if (uniqueIds.size !== value.length || value.some((settings) => !this.areas.some((area) => area.id === settings.id && area.type !== 'floor'))) {
+        return 'failed'
       }
+      applyAreaSettings(this.areas, value)
+      return this.persistAreaSettings()
     },
     setEventFilter(filter: 'all' | SecurityEventType) {
       this.activeEventFilter = filter
